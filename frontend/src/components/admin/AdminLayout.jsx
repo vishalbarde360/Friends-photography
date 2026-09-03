@@ -1,5 +1,6 @@
+// src/components/admin/AdminLayout.jsx
 import React, { useEffect, useState } from "react";
-import { NavLink, useLocation } from "react-router-dom";
+import { NavLink, Link, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 
 const nav = [
@@ -13,12 +14,30 @@ const nav = [
   { to: "/admin/galleries", label: "Client galleries" },
 ];
 
-export default function AdminLayout({ title, children }) {
+export default function AdminLayout({ title, actions, children }) {
   const [open, setOpen] = useState(false);
   const { user, logout } = useAuth();
   const location = useLocation();
+  const navigate = useNavigate();
 
   useEffect(() => setOpen(false), [location.pathname]);
+
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      const tag = document.activeElement?.tagName;
+      if (tag === "INPUT" || tag === "TEXTAREA" || tag === "SELECT") return;
+      if (!(e.ctrlKey || e.metaKey)) return;
+
+      const num = Number(e.key);
+      if (num >= 1 && num <= 9 && nav[num - 1]) {
+        e.preventDefault();
+        navigate(nav[num - 1].to);
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [navigate]);
 
   const linkClass = ({ isActive }) =>
     `block rounded-lg px-4 py-2.5 text-sm transition ${isActive
@@ -89,11 +108,23 @@ export default function AdminLayout({ title, children }) {
         </aside>
 
         <main className="min-w-0 flex-1">
-          {title && (
-            <h1 className="mb-6 hidden font-display text-2xl text-espresso lg:block">
-              {title}
-            </h1>
-          )}
+          {/* Header row — title + Go to Home/website + any page-specific actions.
+              Renders on EVERY admin page since it lives in AdminLayout, not per-page. */}
+          <div className="mb-6 hidden items-center justify-between lg:flex">
+            {title && (
+              <h1 className="font-display text-2xl text-espresso">{title}</h1>
+            )}
+            <div className="flex items-center gap-3">
+
+              <Link
+                to="/"
+                className="rounded-full border border-espresso/20 bg-transparent px-4 py-2 text-sm text-espresso transition hover:border-terracotta hover:text-terracotta focus-ring"
+              >
+                Go to website
+              </Link>
+              {actions}
+            </div>
+          </div>
           {children}
         </main>
       </div>

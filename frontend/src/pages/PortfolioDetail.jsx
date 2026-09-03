@@ -1,3 +1,4 @@
+// src/pages/PortfolioDetail.jsx
 import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import * as portfolioApi from "../api/portfolio";
@@ -34,45 +35,64 @@ export default function PortfolioDetail() {
 
   const date = item.eventDate
     ? new Date(item.eventDate).toLocaleDateString("en-IN", {
-        day: "numeric",
-        month: "long",
-        year: "numeric",
-      })
+      day: "numeric",
+      month: "long",
+      year: "numeric",
+    })
     : null;
 
   return (
     <div>
-      <div className="mx-auto max-w-6xl px-5 pt-10 sm:px-8">
-        <Link to="/portfolio" className="text-sm text-espresso/60 hover:text-terracotta">
+      {/* Hero — blurred backdrop of the same photo, sharp copy on top uncropped */}
+      <div className="relative h-[70vh] min-h-[480px] w-full overflow-hidden bg-espresso">
+        {/* Blurred backdrop fills the frame so no empty bars, regardless of source aspect ratio */}
+        <img
+          src={item.coverImage}
+          alt=""
+          aria-hidden="true"
+          className="absolute inset-0 h-full w-full scale-110 object-cover opacity-60 blur-2xl"
+        />
+        <div className="absolute inset-0 bg-espresso/50" />
+
+        {/* Sharp, uncropped photo centered on top */}
+        <img
+          src={item.coverImage}
+          alt={item.title}
+          onClick={() => setLightbox(item.coverImage)}
+          className="absolute inset-0 m-auto h-full max-h-full w-auto max-w-full object-contain cursor-zoom-in drop-shadow-2xl"
+        />
+
+        {/* Bottom gradient so the title stays readable over any image */}
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-espresso/90 to-transparent" />
+
+        <Link
+          to="/portfolio"
+          className="absolute left-5 top-5 rounded-full bg-espresso/50 px-4 py-2 text-sm text-softwhite backdrop-blur transition hover:bg-espresso/70 sm:left-8 sm:top-8"
+        >
           ← Back to portfolio
         </Link>
 
-        <div className="mt-6 flex flex-wrap items-end justify-between gap-4">
-          <div>
+        <div className="absolute inset-x-0 bottom-0 px-5 pb-6 sm:px-8 sm:pb-8">
+          <div className="mx-auto max-w-6xl">
             <p className="text-xs uppercase tracking-wide2 text-terracotta">{item.category}</p>
-            <h1 className="mt-2 font-display text-4xl text-espresso sm:text-5xl">{item.title}</h1>
-            <p className="mt-2 text-sm text-espresso/60">
+            <h1 className="mt-2 max-w-2xl font-display text-3xl leading-tight text-softwhite sm:text-5xl">
+              {item.title}
+            </h1>
+            <p className="mt-2 text-sm text-softwhite/80">
               {item.location}
               {date ? ` · ${date}` : ""}
             </p>
           </div>
         </div>
+      </div>
 
-        {item.description && (
-          <p className="mt-6 max-w-2xl text-sm leading-relaxed text-espresso/70">
+      {item.description && (
+        <div className="mx-auto max-w-6xl px-5 pt-10 sm:px-8">
+          <p className="max-w-2xl text-sm leading-relaxed text-espresso/70">
             {item.description}
           </p>
-        )}
-      </div>
-
-      <div className="mt-8 aspect-[16/9] w-full overflow-hidden bg-beige sm:mt-10">
-        <img
-          src={item.coverImage}
-          alt={item.title}
-          className="h-full w-full object-cover cursor-zoom-in"
-          onClick={() => setLightbox(item.coverImage)}
-        />
-      </div>
+        </div>
+      )}
 
       {item.images?.length > 0 && (
         <div className="mx-auto max-w-6xl px-5 py-10 sm:px-8">

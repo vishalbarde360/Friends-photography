@@ -1,5 +1,7 @@
+// src/pages/admin/Dashboard.jsx
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+
 import AdminLayout from "../../components/admin/AdminLayout";
 import Loader from "../../components/Loader";
 import * as inquiryApi from "../../api/inquiry";
@@ -42,15 +44,8 @@ export default function Dashboard() {
 
   return (
     <AdminLayout
-      title="Dashboard"
-      actions={
-        <Link
-          to="/"
-          className="rounded-full border border-espresso/20 px-4 py-2 text-sm text-espresso transition hover:border-terracotta hover:text-terracotta focus-ring"
-        >
-          Go to website
-        </Link>
-      }
+
+
     >
       {!stats ? (
         <Loader label="Loading dashboard" />
@@ -87,6 +82,7 @@ export default function Dashboard() {
                       <p className="text-xs text-espresso/55">
                         {i.eventType} · {i.location}
                       </p>
+
                     </div>
                     <span className="text-xs text-espresso/50">{i.status}</span>
                   </div>

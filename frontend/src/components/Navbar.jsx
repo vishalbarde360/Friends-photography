@@ -58,12 +58,14 @@ export default function Navbar() {
               >
                 Dashboard
               </Link>
+
               <button
                 onClick={logout}
                 className="rounded-full border border-espresso/20 px-4 py-2 text-sm text-espresso transition hover:border-terracotta hover:text-terracotta focus-ring"
               >
                 Log out
               </button>
+
             </>
           ) : (
             <Link

@@ -17,6 +17,7 @@ const eventRouter = require("./routes/event.route.js");
 const albumRouter = require("./routes/album.route.js");
 const photoRouter = require("./routes/photo.route.js");
 const galleryRouter = require("./routes/gallery.route.js");
+const reviewRouter = require("./routes/review.route.js");
 
 const app = express();
 
@@ -80,6 +81,8 @@ app.use("/api/photo", photoRouter);
 app.use("/api/photos", photoRouter);
 
 app.use("/api/gallery", galleryRouter);
+
+app.use("/api/review", reviewRouter)
 
 
 // =======================
