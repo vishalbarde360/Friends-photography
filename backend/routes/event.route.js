@@ -1,0 +1,2 @@
+const express=require("express"); const router=express.Router(); const auth=require("../middleware/auth.user.js"); const admin=require("../middleware/admin.user.js"); const c=require("../controllers/event.controller.js");
+router.get("/",auth,admin,c.getAllEvents); router.get("/:id",auth,admin,c.getEventById); router.post("/",auth,admin,c.createEvent); router.put("/:id",auth,admin,c.updateEvent); router.delete("/:id",auth,admin,c.deleteEvent); module.exports=router;

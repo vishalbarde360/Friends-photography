@@ -1,0 +1,2 @@
+const express=require("express"); const router=express.Router(); const auth=require("../middleware/auth.user.js"); const admin=require("../middleware/admin.user.js"); const c=require("../controllers/inquiry.controller.js");
+router.post("/",c.createInquiry); router.get("/",auth,admin,c.getAllInquiries); router.get("/:id",auth,admin,c.getInquiryById); router.put("/:id",auth,admin,c.updateInquiry); router.delete("/:id",auth,admin,c.deleteInquiry); router.post("/create",c.createInquiry); module.exports=router;

@@ -1,0 +1,11 @@
+const express = require("express");
+const router = express.Router();
+const auth = require("../middleware/auth.user.js");
+const c = require("../controllers/client.controller.js");
+router.post("/", auth, c.createClient);
+router.get("/", auth, c.getAllClients);
+router.get("/:id", auth, c.getClientById);
+router.put("/:id", auth, c.updateClientById);
+router.delete("/:id", auth, c.deleleClientById);
+router.post("/create", auth, c.createClient);
+module.exports = router;

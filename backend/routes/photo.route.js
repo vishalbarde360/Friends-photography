@@ -1,0 +1,2 @@
+const express=require("express"); const router=express.Router(); const auth=require("../middleware/auth.user.js"); const admin=require("../middleware/admin.user.js"); const upload=require("../middleware/upload.middleware.js"); const c=require("../controllers/photo.controller.js");
+router.get("/",auth,admin,c.getAllPhotos); router.get("/:id",auth,admin,c.getPhotoById); router.post("/",auth,admin,upload.photosUpload,c.uploadPhotos); router.post("/upload",auth,admin,upload.photosUpload,c.uploadPhotos); router.delete("/:id",auth,admin,c.deletePhoto); module.exports=router;

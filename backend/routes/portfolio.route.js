@@ -1,0 +1,3 @@
+const express=require("express"); const router=express.Router(); const auth=require("../middleware/auth.user.js"); const admin=require("../middleware/admin.user.js"); const upload=require("../middleware/upload.middleware.js").portfolioUpload; const c=require("../controllers/portfolio.controller.js");
+router.get("/",c.getAllPortfolios); router.get("/:id",c.getPortfolioById); router.post("/",auth,admin,upload,c.createPortfolio); router.put("/:id",auth,admin,upload,c.updatePortfolio); router.delete("/:id",auth,admin,c.deletePortfolio);
+router.post("/create",auth,admin,upload,c.createPortfolio); router.get("/get",c.getAllPortfolios); module.exports=router;

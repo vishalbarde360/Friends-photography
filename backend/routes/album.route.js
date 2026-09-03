@@ -1,0 +1,2 @@
+const express=require("express"); const router=express.Router(); const auth=require("../middleware/auth.user.js"); const admin=require("../middleware/admin.user.js"); const c=require("../controllers/album.controller.js");
+router.get("/",auth,admin,c.getAllAlbums); router.get("/event/:eventId",auth,admin,c.getEventAlbums); router.get("/:id",auth,admin,c.getAlbumById); router.post("/",auth,admin,c.createAlbum); router.put("/:id",auth,admin,c.updateAlbum); router.delete("/:id",auth,admin,c.deleteAlbum); module.exports=router;
