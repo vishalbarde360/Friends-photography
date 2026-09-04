@@ -53,45 +53,7 @@ function HeroSlideshow() {
       ))}
 
       <div className="absolute inset-0 bg-espresso/55" />
-
       <div className="absolute inset-0 bg-gradient-to-t from-espresso/80 via-espresso/20 to-espresso/40" />
-    </div>
-  );
-}
-
-/* ================================
-   STAR INPUT
-================================ */
-
-function StarInput({ value, onChange, dark = true }) {
-  const [hover, setHover] = useState(0);
-
-  return (
-    <div className="flex gap-1">
-      {[1, 2, 3, 4, 5].map((n) => (
-        <button
-          key={n}
-          type="button"
-          aria-label={`${n} star${n > 1 ? "s" : ""}`}
-          onMouseEnter={() => setHover(n)}
-          onMouseLeave={() => setHover(0)}
-          onClick={() => onChange(n)}
-          className="text-xl leading-none transition-transform hover:scale-110"
-        >
-          <span
-            style={{
-              color:
-                (hover || value) >= n
-                  ? "#FFD700"
-                  : dark
-                    ? "#FFFFFF"
-                    : "#5C5149",
-            }}
-          >
-            ★
-          </span>
-        </button>
-      ))}
     </div>
   );
 }
@@ -132,9 +94,6 @@ function ReviewMarquee({ reviews }) {
     );
   }
 
-  /*
-    Duplicate reviews for continuous animation.
-  */
   const loop = [
     ...reviews,
     ...reviews,
@@ -158,25 +117,152 @@ function ReviewMarquee({ reviews }) {
               py-5
               ring-1
               ring-softwhite/15
+              transition duration-300 hover:-translate-y-2 hover:bg-softwhite/15 hover:shadow-xl
             "
           >
-            {/* Rating */}
             <StarDisplay rating={review.rating} />
 
-            {/* Review */}
             <p className="mt-3 line-clamp-4 text-sm leading-6 text-softwhite/85">
               "{review.text}"
             </p>
 
-            {/* Name */}
             <p className="mt-3 text-xs uppercase tracking-wide2 text-softwhite/50">
-
               {review.name}
             </p>
           </div>
         ))}
       </div>
     </div>
+  );
+}
+
+/* ================================
+   WHAT WE CAPTURE ICON
+================================ */
+
+function CaptureIcon({ type }) {
+  if (type === "ready") {
+    return (
+      <svg viewBox="0 0 24 24" className="h-7 w-7" fill="none">
+        <rect
+          x="5"
+          y="7"
+          width="14"
+          height="12"
+          rx="2"
+          stroke="currentColor"
+          strokeWidth="1.5"
+        />
+        <path
+          d="M9 7l1.2-2h3.6L15 7"
+          stroke="currentColor"
+          strokeWidth="1.5"
+        />
+        <circle
+          cx="12"
+          cy="13"
+          r="3"
+          stroke="currentColor"
+          strokeWidth="1.5"
+        />
+      </svg>
+    );
+  }
+
+  if (type === "celebration") {
+    return (
+      <svg viewBox="0 0 24 24" className="h-7 w-7" fill="none">
+        <path
+          d="M6 18c4-1 7-4 8-9l1-4-4 2c-5 1-8 5-9 9l4 2Z"
+          stroke="currentColor"
+          strokeWidth="1.5"
+          strokeLinejoin="round"
+        />
+        <path
+          d="M15 5l3-2M18 9h3M16 2v3"
+          stroke="currentColor"
+          strokeWidth="1.5"
+          strokeLinecap="round"
+        />
+      </svg>
+    );
+  }
+
+  if (type === "vows") {
+    return (
+      <svg viewBox="0 0 24 24" className="h-7 w-7" fill="none">
+        <circle
+          cx="9"
+          cy="13"
+          r="4"
+          stroke="currentColor"
+          strokeWidth="1.5"
+        />
+        <circle
+          cx="15"
+          cy="13"
+          r="4"
+          stroke="currentColor"
+          strokeWidth="1.5"
+        />
+        <path
+          d="M12 5c1.5 2 3 3 3 3"
+          stroke="currentColor"
+          strokeWidth="1.5"
+          strokeLinecap="round"
+        />
+      </svg>
+    );
+  }
+
+  if (type === "candid") {
+    return (
+      <svg viewBox="0 0 24 24" className="h-7 w-7" fill="none">
+        <circle
+          cx="9"
+          cy="9"
+          r="3"
+          stroke="currentColor"
+          strokeWidth="1.5"
+        />
+        <circle
+          cx="16"
+          cy="10"
+          r="2.5"
+          stroke="currentColor"
+          strokeWidth="1.5"
+        />
+        <path
+          d="M3.5 19c.7-3.2 2.5-5 5.5-5s4.8 1.8 5.5 5M14 16c2.7-.8 5 .3 6 3"
+          stroke="currentColor"
+          strokeWidth="1.5"
+          strokeLinecap="round"
+        />
+      </svg>
+    );
+  }
+
+  return (
+    <svg viewBox="0 0 24 24" className="h-7 w-7" fill="none">
+      <path
+        d="M5 17c4-1 7-4 9-9"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+      />
+      <path
+        d="M14 8l1-4 2 3 3-1-2 4"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M4 20h16"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+      />
+    </svg>
   );
 }
 
@@ -188,27 +274,13 @@ export default function Home() {
   const [portfolios, setPortfolios] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  /* Reviews */
   const [reviews, setReviews] = useState([]);
 
-  /* Review form */
-  const [form, setForm] = useState({
-    name: "",
-    rating: 0,
-    text: "",
-  });
-
-  const [submitted, setSubmitted] = useState(false);
-  const [reviewLoading, setReviewLoading] = useState(false);
-  const [reviewError, setReviewError] = useState("");
-
   /* ================================
-     FETCH PORTFOLIO + REVIEWS
+     FETCH DATA
   ================================= */
 
   useEffect(() => {
-    /* Portfolio */
-
     portfolioApi
       .getAllPortfolios()
       .then((res) => {
@@ -222,8 +294,6 @@ export default function Home() {
         setLoading(false);
       });
 
-    /* Reviews */
-
     reviewApi
       .getReviews()
       .then((res) => {
@@ -236,69 +306,33 @@ export default function Home() {
   }, []);
 
   /* ================================
-     REVIEW SUBMIT
+     SCROLL REVEAL ANIMATION
   ================================= */
 
-  const handleReviewSubmit = async (e) => {
-    e.preventDefault();
+  useEffect(() => {
+    const elements = document.querySelectorAll(".scroll-reveal");
 
-    setReviewError("");
-    setSubmitted(false);
+    if (!elements.length) return;
 
-    if (!form.name.trim()) {
-      setReviewError("Please enter your name.");
-      return;
-    }
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("is-visible");
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      {
+        threshold: 0.12,
+        rootMargin: "0px 0px -40px 0px",
+      }
+    );
 
-    if (!form.rating) {
-      setReviewError("Please select a star rating.");
-      return;
-    }
+    elements.forEach((element) => observer.observe(element));
 
-    if (!form.text.trim()) {
-      setReviewError("Please write your review.");
-      return;
-    }
-
-    try {
-      setReviewLoading(true);
-
-      const response = await reviewApi.createReview({
-        name: form.name.trim(),
-        rating: Number(form.rating),
-        text: form.text.trim(),
-      });
-
-      const newReview = response.data.data;
-
-      /* Immediately add review to marquee */
-
-      setReviews((prev) => [newReview, ...prev]);
-
-      /* Reset */
-
-      setForm({
-        name: "",
-        rating: 0,
-        text: "",
-      });
-
-      setSubmitted(true);
-
-      setTimeout(() => {
-        setSubmitted(false);
-      }, 3000);
-    } catch (error) {
-      console.error("Review submit error:", error);
-
-      setReviewError(
-        error?.response?.data?.message ||
-        "Failed to submit review. Please try again."
-      );
-    } finally {
-      setReviewLoading(false);
-    }
-  };
+    return () => observer.disconnect();
+  }, [loading, portfolios.length, reviews.length]);
 
   return (
     <div>
@@ -324,6 +358,75 @@ export default function Home() {
           animation: heroFadeUp 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
 
+        @keyframes scrollReveal {
+          from {
+            opacity: 0;
+            transform: translateY(45px);
+          }
+
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+
+        .scroll-reveal {
+          opacity: 0;
+          transform: translateY(45px);
+        }
+
+        .scroll-reveal.is-visible {
+          animation: scrollReveal 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        .hover-lift {
+          transition:
+            transform 350ms cubic-bezier(0.16, 1, 0.3, 1),
+            box-shadow 350ms ease,
+            border-color 350ms ease;
+        }
+
+        .hover-lift:hover {
+          transform: translateY(-8px);
+          box-shadow: 0 18px 40px rgba(42, 31, 24, 0.14);
+        }
+
+        .capture-hover {
+          transition:
+            transform 300ms cubic-bezier(0.16, 1, 0.3, 1),
+            color 300ms ease;
+        }
+
+        .capture-hover:hover {
+          transform: translateY(-7px);
+        }
+
+        .capture-hover svg {
+          transition: transform 300ms ease;
+        }
+
+        .capture-hover:hover svg {
+          transform: scale(1.15) rotate(-4deg);
+        }
+
+        .image-hover {
+          transition:
+            transform 600ms cubic-bezier(0.16, 1, 0.3, 1),
+            box-shadow 400ms ease;
+        }
+
+        .image-hover img {
+          transition: transform 700ms cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .image-hover:hover {
+          box-shadow: 0 22px 50px rgba(42, 31, 24, 0.18);
+        }
+
+        .image-hover:hover img {
+          transform: scale(1.06);
+        }
+
         @keyframes reviewMarquee {
           from {
             transform: translateX(0);
@@ -337,6 +440,19 @@ export default function Home() {
         .review-marquee {
           animation: reviewMarquee 32s linear infinite;
         }
+
+        @media (prefers-reduced-motion: reduce) {
+          .scroll-reveal,
+          .scroll-reveal.is-visible {
+            opacity: 1;
+            transform: none;
+            animation: none;
+          }
+
+          .review-marquee {
+            animation: none;
+          }
+        }
       `}</style>
 
       {/* ================================
@@ -349,18 +465,14 @@ export default function Home() {
         <div className="relative z-10 mx-auto w-full max-w-6xl px-5 py-24 text-center sm:px-8">
           <p
             className="hero-fade-up text-xs uppercase tracking-wide2 text-softwhite/70"
-            style={{
-              animationDelay: "0.1s",
-            }}
+            style={{ animationDelay: "0.1s" }}
           >
             Photography studio · Since the everyday, made memorable
           </p>
 
           <h1
             className="hero-fade-up mx-auto mt-5 max-w-3xl font-display text-3xl leading-[1.1] text-softwhite sm:text-4xl md:text-5xl"
-            style={{
-              animationDelay: "0.35s",
-            }}
+            style={{ animationDelay: "0.35s" }}
           >
             We photograph the moments you'll{" "}
             <span className="italic text-terracotta">
@@ -370,9 +482,7 @@ export default function Home() {
 
           <p
             className="hero-fade-up mx-auto mt-6 max-w-xl text-base leading-relaxed text-softwhite/80"
-            style={{
-              animationDelay: "0.6s",
-            }}
+            style={{ animationDelay: "0.6s" }}
           >
             Weddings, pre-weddings, birthdays and corporate stories —
             shot candidly, delivered as private galleries your clients
@@ -381,9 +491,7 @@ export default function Home() {
 
           <div
             className="hero-fade-up mt-8 flex flex-wrap justify-center gap-3"
-            style={{
-              animationDelay: "0.85s",
-            }}
+            style={{ animationDelay: "0.85s" }}
           >
             <Link
               to="/portfolio"
@@ -406,12 +514,12 @@ export default function Home() {
           CATEGORY STRIP
       ================================= */}
 
-      <section className="border-y border-espresso/10 bg-beige/40">
+      <section className="scroll-reveal border-y border-espresso/10 bg-beige/40">
         <div className="mx-auto flex max-w-6xl flex-wrap gap-x-8 gap-y-3 px-5 py-6 text-sm text-espresso/70 sm:px-8">
           {categories.map((category, index) => (
             <span
               key={category}
-              className="flex items-center gap-8"
+              className="flex items-center gap-8 transition duration-300 hover:-translate-y-0.5 hover:text-terracotta"
             >
               {category}
 
@@ -425,12 +533,198 @@ export default function Home() {
         </div>
       </section>
 
+      {/* ==================================================
+          NEW SECTION 1 — WEDDING FILMS
+      ================================================== */}
+
+      {/* ================================
+    WEDDING FILM VIDEO BANNER
+================================ */}
+
+      <section className="scroll-reveal group relative h-[300px] w-full overflow-hidden rounded-xl sm:h-[380px] md:h-[300px]">
+
+        {/* Background Video */}
+        <video
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="auto"
+          className="absolute inset-0 h-full w-full object-cover transition duration-700 ease-out group-hover:scale-105"
+        >
+          <source
+            src="/wedding.mp4"
+            type="video/mp4"
+          />
+
+          Your browser does not support the video tag.
+        </video>
+
+        {/* Dark Overlay */}
+        <div className="absolute inset-0 bg-black/45" />
+
+        {/* Gradient Overlay */}
+        <div className="absolute inset-0 bg-gradient-to-r from-black/65 via-black/30 to-black/20" />
+
+        {/* Content */}
+        <div className="relative z-10 flex h-full items-center">
+
+          <div className="w-full px-6 sm:px-10 md:px-14 lg:px-16">
+
+            {/* Small Heading */}
+            <p className="text-[9px] font-medium uppercase tracking-[0.25em] text-white/70 sm:text-[10px]">
+              Wedding Films
+            </p>
+
+            {/* Main Heading */}
+            <h2 className="mt-3 max-w-xl font-display text-3xl leading-tight text-white sm:text-4xl md:text-5xl">
+              Your Story, In Motion
+            </h2>
+
+            {/* Description */}
+            <p className="mt-3 max-w-md text-xs leading-5 text-white/75 sm:text-sm">
+              Experience the emotions, the joy and the little moments
+              that make your wedding unforgettable.
+            </p>
+
+            {/* Button */}
+            <Link
+              to="https://cdn.pixabay.com/video/2024/05/20/212698_large.mp4"
+              className="
+          mt-5
+          inline-flex
+          items-center
+          rounded-md
+          border
+          border-white/70
+          px-4
+          py-2
+          text-[11px]
+          text-white
+          transition
+          duration-300
+          hover:bg-white
+          hover:text-espresso
+        "    target="_blank"
+              rel="noopener noreferrer"
+            >
+              Watch Wedding Film
+            </Link>
+
+          </div>
+
+          {/* Play Circle */}
+
+        </div>
+
+      </section>
+
+      {/* ==================================================
+          NEW SECTION 2 — WHAT WE CAPTURE
+      ================================================== */}
+
+      <section className="scroll-reveal border-y border-espresso/10 bg-[#f7f4ef]">
+        <div className="mx-auto max-w-7xl px-5 py-12 sm:px-8">
+
+          <div className="mb-9">
+            <p className="text-[10px] uppercase tracking-[0.25em] text-terracotta">
+              What We Capture
+            </p>
+          </div>
+
+          <div className="grid grid-cols-2 gap-8 sm:grid-cols-3 lg:grid-cols-5">
+
+            {/* Getting Ready */}
+
+            <div className="capture-hover text-center">
+              <div className="flex justify-center text-espresso/80">
+                <CaptureIcon type="ready" />
+              </div>
+
+              <h3 className="mt-4 font-display text-base text-espresso">
+                Getting Ready
+              </h3>
+
+              <p className="mx-auto mt-2 max-w-[150px] text-[11px] leading-5 text-espresso/55">
+                The quiet moments before forever.
+              </p>
+            </div>
+
+            {/* Celebrations */}
+
+            <div className="capture-hover text-center">
+              <div className="flex justify-center text-espresso/80">
+                <CaptureIcon type="celebration" />
+              </div>
+
+              <h3 className="mt-4 font-display text-base text-espresso">
+                Celebrations
+              </h3>
+
+              <p className="mx-auto mt-2 max-w-[150px] text-[11px] leading-5 text-espresso/55">
+                Haldi, Mehendi, Sangeet and more.
+              </p>
+            </div>
+
+            {/* The Vows */}
+
+            <div className="capture-hover text-center">
+              <div className="flex justify-center text-espresso/80">
+                <CaptureIcon type="vows" />
+              </div>
+
+              <h3 className="mt-4 font-display text-base text-espresso">
+                The Vows
+              </h3>
+
+              <p className="mx-auto mt-2 max-w-[150px] text-[11px] leading-5 text-espresso/55">
+                Sacred rituals and heartfelt emotions.
+              </p>
+            </div>
+
+            {/* Candid Moments */}
+
+            <div className="capture-hover text-center">
+              <div className="flex justify-center text-espresso/80">
+                <CaptureIcon type="candid" />
+              </div>
+
+              <h3 className="mt-4 font-display text-base text-espresso">
+                Candid Moments
+              </h3>
+
+              <p className="mx-auto mt-2 max-w-[150px] text-[11px] leading-5 text-espresso/55">
+                Real smiles, real stories.
+              </p>
+            </div>
+
+            {/* Afterglow */}
+
+            <div className="capture-hover text-center">
+              <div className="flex justify-center text-espresso/80">
+                <CaptureIcon type="afterglow" />
+              </div>
+
+              <h3 className="mt-4 font-display text-base text-espresso">
+                The Afterglow
+              </h3>
+
+              <p className="mx-auto mt-2 max-w-[150px] text-[11px] leading-5 text-espresso/55">
+                A celebration to remember.
+              </p>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
       {/* ================================
           ABOUT
       ================================= */}
 
       <section className="mx-auto max-w-6xl px-5 py-16 sm:px-8">
         <div className="grid gap-10 md:grid-cols-2 md:items-center">
+
           <div>
             <p className="text-xs uppercase tracking-wide2 text-terracotta">
               About the studio
@@ -452,6 +746,7 @@ export default function Home() {
             </p>
 
             <div className="mt-8 grid grid-cols-3 gap-6 border-t border-espresso/10 pt-6">
+
               <div>
                 <p className="font-display text-3xl text-espresso">
                   7+
@@ -481,10 +776,11 @@ export default function Home() {
                   Average rating
                 </p>
               </div>
+
             </div>
           </div>
 
-          <div className="mx-auto w-full max-w-md overflow-hidden rounded-3xl bg-beige">
+          <div className="image-hover mx-auto w-full max-w-md overflow-hidden rounded-3xl bg-beige">
             <img
               src="https://i.pinimg.com/736x/7f/07/77/7f07770020ed44766d2981d45bd24f19.jpg"
               alt="Behind the scenes at a Friends Photography shoot"
@@ -492,6 +788,7 @@ export default function Home() {
               loading="lazy"
             />
           </div>
+
         </div>
       </section>
 
@@ -499,8 +796,10 @@ export default function Home() {
           FEATURED WORK
       ================================= */}
 
-      <section className="mx-auto max-w-6xl px-5 py-16 sm:px-8">
+      <section className="scroll-reveal mx-auto max-w-6xl px-5 py-16 sm:px-8">
+
         <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
+
           <div>
             <h2 className="font-display text-3xl text-espresso">
               Recent stories
@@ -517,6 +816,7 @@ export default function Home() {
           >
             See full portfolio
           </Link>
+
         </div>
 
         {loading ? (
@@ -526,7 +826,7 @@ export default function Home() {
             No portfolio pieces published yet — check back soon.
           </p>
         ) : (
-          <div className="grid grid-cols-2 gap-4 sm:gap-6 md:grid-cols-3 lg:grid-cols-4">
+          <div className="grid grid-cols-2 gap-4 sm:gap-6 md:grid-cols-3 lg:grid-cols-4 [&>*]:transition [&>*]:duration-300 [&>*]:hover:-translate-y-2 [&>*]:hover:shadow-xl">
             {portfolios.slice(0, 8).map((portfolio) => (
               <PortfolioCard
                 key={portfolio._id}
@@ -535,14 +835,17 @@ export default function Home() {
             ))}
           </div>
         )}
+
       </section>
 
       {/* ================================
           GALLERY CTA
       ================================= */}
 
-      <section className="mx-auto max-w-6xl px-5 pb-20 sm:px-8">
-        <div className="grid gap-8 rounded-3xl bg-espresso px-6 py-12 text-softwhite sm:px-12 md:grid-cols-[1.2fr_auto] md:items-center">
+      <section className="scroll-reveal mx-auto max-w-6xl px-5 pb-20 sm:px-8">
+
+        <div className="hover-lift grid gap-8 rounded-3xl bg-espresso px-6 py-12 text-softwhite sm:px-12 md:grid-cols-[1.2fr_auto] md:items-center">
+
           <div>
             <h3 className="font-display text-2xl sm:text-3xl">
               Already shot with us? Your gallery is one link away.
@@ -560,17 +863,21 @@ export default function Home() {
           >
             Open my gallery
           </Link>
+
         </div>
+
       </section>
 
       {/* ================================
           CLIENT REVIEWS
-          FORM IS NOW IN FOOTER
       ================================= */}
 
-      <section className="bg-espresso py-14 text-softwhite">
+      <section className="scroll-reveal bg-espresso py-14 text-softwhite">
+
         <div className="w-full">
+
           <div className="px-5 text-center sm:px-8">
+
             <p className="text-xs uppercase tracking-wide2 text-terracotta">
               Client reviews
             </p>
@@ -578,13 +885,17 @@ export default function Home() {
             <h2 className="mt-2 font-display text-3xl sm:text-4xl">
               What people say about us
             </h2>
+
           </div>
 
           <div className="mt-10 w-full">
             <ReviewMarquee reviews={reviews} />
           </div>
+
         </div>
+
       </section>
+
     </div>
   );
 }

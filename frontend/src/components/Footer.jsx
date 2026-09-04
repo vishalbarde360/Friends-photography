@@ -1,8 +1,28 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import * as reviewApi from "../api/review";
 
 export default function Footer() {
+  const [footerVisible, setFooterVisible] = useState(false);
+
+  useEffect(() => {
+    const footer = document.querySelector("footer");
+    if (!footer) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setFooterVisible(true);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.1 }
+    );
+
+    observer.observe(footer);
+    return () => observer.disconnect();
+  }, []);
+
   const [form, setForm] = useState({
     name: "",
     rating: 0,
@@ -62,7 +82,6 @@ export default function Footer() {
 
       const newReview = response?.data?.data;
 
-      // Home marquee ला नवीन review पाठवण्यासाठी
       window.dispatchEvent(
         new CustomEvent("review-created", {
           detail: newReview,
@@ -93,138 +112,286 @@ export default function Footer() {
     }
   };
 
+  // ================= SERVICES =================
+
+  const services = [
+    {
+      name: "Wedding Photography",
+      icon: (
+        <svg viewBox="0 0 24 24" fill="none" className="h-5 w-5">
+          <path
+            d="M4 8.5a1.5 1.5 0 0 1 1.5-1.5h2l.9-1.5h7.2l.9 1.5h2A1.5 1.5 0 0 1 20 8.5v9A1.5 1.5 0 0 1 18.5 19h-13A1.5 1.5 0 0 1 4 17.5v-9Z"
+            stroke="currentColor"
+            strokeWidth="1.5"
+            strokeLinejoin="round"
+          />
+          <circle
+            cx="12"
+            cy="13"
+            r="3.2"
+            stroke="currentColor"
+            strokeWidth="1.5"
+          />
+        </svg>
+      ),
+    },
+
+    {
+      name: "Wedding Films",
+      icon: (
+        <svg viewBox="0 0 24 24" fill="none" className="h-5 w-5">
+          <rect
+            x="3.5"
+            y="6.5"
+            width="12"
+            height="11"
+            rx="1.5"
+            stroke="currentColor"
+            strokeWidth="1.5"
+          />
+          <path
+            d="M15.5 10.5 20 8v8l-4.5-2.5"
+            stroke="currentColor"
+            strokeWidth="1.5"
+            strokeLinejoin="round"
+          />
+        </svg>
+      ),
+    },
+
+    {
+      name: "Pre-Wedding Shoots",
+      icon: (
+        <svg viewBox="0 0 24 24" fill="none" className="h-5 w-5">
+          <rect
+            x="3.5"
+            y="5"
+            width="17"
+            height="14"
+            rx="1.5"
+            stroke="currentColor"
+            strokeWidth="1.5"
+          />
+          <circle
+            cx="9"
+            cy="10.5"
+            r="1.6"
+            stroke="currentColor"
+            strokeWidth="1.5"
+          />
+          <path
+            d="M4.5 16.5 9 12.5l3 2.5 3-3 4.5 4.5"
+            stroke="currentColor"
+            strokeWidth="1.5"
+            strokeLinejoin="round"
+          />
+        </svg>
+      ),
+    },
+
+    {
+      name: "Engagements",
+      icon: (
+        <svg viewBox="0 0 24 24" fill="none" className="h-5 w-5">
+          <circle
+            cx="9"
+            cy="14"
+            r="4"
+            stroke="currentColor"
+            strokeWidth="1.5"
+          />
+          <circle
+            cx="15"
+            cy="14"
+            r="4"
+            stroke="currentColor"
+            strokeWidth="1.5"
+          />
+        </svg>
+      ),
+    },
+
+    {
+      name: "Albums",
+      icon: (
+        <svg viewBox="0 0 24 24" fill="none" className="h-5 w-5">
+          <path
+            d="M5 4.5h9l5 5v10a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-14a1 1 0 0 1 1-1Z"
+            stroke="currentColor"
+            strokeWidth="1.5"
+            strokeLinejoin="round"
+          />
+          <path
+            d="M14 4.5v4.5a1 1 0 0 0 1 1h4.5"
+            stroke="currentColor"
+            strokeWidth="1.5"
+            strokeLinejoin="round"
+          />
+        </svg>
+      ),
+    },
+
+
+  ];
+
+  // ================= INSTAGRAM SHOTS =================
+
+  const instagramShots = [
+    "https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=300&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1465495976277-4387d4b0b4c6?q=80&w=300&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1519225421980-715cb0215aed?q=80&w=300&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?q=80&w=300&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=300&auto=format&fit=crop&sat=-30",
+    "https://images.unsplash.com/photo-1465495976277-4387d4b0b4c6?q=80&w=300&auto=format&fit=crop&sat=-30",
+    "https://images.unsplash.com/photo-1519225421980-715cb0215aed?q=80&w=300&auto=format&fit=crop&sat=-30",
+  ];
+
   return (
     <footer className="bg-[#eadbc5] text-charcoal">
 
-      {/* Main Footer */}
-      <div className="mx-auto max-w-7xl px-6 py-14 lg:px-10">
+      {/* ================= MAIN FOOTER ================= */}
 
-        <div className="grid gap-10 lg:grid-cols-4">
+      <div className="mx-auto max-w-7xl px-6 py-8 lg:px-10">
 
+        <div className={`flex flex-col gap-10 lg:flex-row lg:items-start transition-all duration-700 ease-out ${footerVisible ? "translate-y-0 opacity-100" : "translate-y-8 opacity-0"}`}>
 
-          {/* ================= BRAND + MAP ================= */}
-          <div className="lg:col-span-1">
+          {/* ================= LEFT ================= */}
 
-            {/* Brand */}
-            <Link
-              to="/"
-              className="font-serif text-2xl font-semibold"
-            >
-              Friends{" "}
-              <span className="italic font-normal text-terracotta">
-                Photography
-              </span>
-            </Link>
+          <div className="flex-1">
 
-            <p className="mt-5 max-w-sm text-sm leading-6 text-charcoal/70">
-              Wedding, pre-wedding, birthday and corporate photography —
-              every frame kept, curated and delivered with care.
-            </p>
+            {/* Brand / Explore / Studio */}
 
-            {/* Map + Connect */}
-            <div className="mt-7 grid grid-cols-2 gap-4">
+            <div className={`grid gap-8 sm:grid-cols-3 transition-all duration-700 delay-100 ease-out ${footerVisible ? "translate-y-0 opacity-100" : "translate-y-6 opacity-0"}`}>
 
-              {/* MAP CARD */}
-              <div
-                className="
-        h-[210px]
-        w-[230px]
-        overflow-hidden
-        rounded-2xl
-        border
-        border-black/10
-        bg-white
-        shadow-sm
-      "
-              >
-                <iframe
-                  title="Friends Photography Location"
-                  src="https://www.google.com/maps?q=Pune,Maharashtra&output=embed"
-                  className="h-full w-full border-0"
-                  loading="lazy"
-                  referrerPolicy="no-referrer-when-downgrade"
-                />
+              {/* Brand */}
+
+              <div>
+                <Link
+                  to="/"
+                  className="font-serif text-2xl font-semibold transition-transform duration-300 hover:-translate-y-1 inline-block"
+                >
+                  Friends{" "}
+                  <span className="italic font-normal text-terracotta">
+                    Photography
+                  </span>
+                </Link>
+
+                <p className="mt-3 max-w-sm text-sm leading-6 text-charcoal/70">
+                  Wedding, pre-wedding, birthday and corporate photography —
+                  every frame kept, curated and delivered with care.
+                </p>
               </div>
 
-              {/* CONNECT CARD */}
+              {/* Explore */}
+
+              <div>
+                <p className="text-[10px] uppercase tracking-[0.2em] text-terracotta">
+                  Explore
+                </p>
+
+                <div className="mt-4 flex flex-col gap-3 text-sm">
+
+                  <Link
+                    to="/portfolio"
+                    className="inline-block transition-all duration-300 hover:translate-x-1 hover:text-terracotta"
+                  >
+                    Portfolio
+                  </Link>
+
+                  <Link
+                    to="/client-gallery"
+                    className="inline-block transition-all duration-300 hover:translate-x-1 hover:text-terracotta"
+                  >
+                    Client gallery
+                  </Link>
+
+                  <Link
+                    to="/enquire"
+                    className="inline-block transition-all duration-300 hover:translate-x-1 hover:text-terracotta"
+                  >
+                    Enquire
+                  </Link>
+
+                </div>
+              </div>
+
+              {/* Studio */}
+
+              <div>
+                <p className="text-[10px] uppercase tracking-[0.2em] text-terracotta">
+                  Studio
+                </p>
+
+                <div className="mt-4 space-y-3 text-sm text-charcoal/80">
+
+                  <p>
+                    hello@friendsphotography.studio
+                  </p>
+
+                  <p>
+                    +91 90000 00000
+                  </p>
+
+                  <p>
+                    Pune, Maharashtra
+                  </p>
+
+                </div>
+              </div>
 
             </div>
-          </div>
 
-          {/* ================= EXPLORE ================= */}
-          <div>
+            {/* ================= OUR SERVICES ================= */}
 
-            <p className="text-[10px] uppercase tracking-[0.2em] text-terracotta">
-              Explore
-            </p>
+            <div className={`mt-10 transition-all duration-700 delay-200 ease-out ${footerVisible ? "translate-y-0 opacity-100" : "translate-y-6 opacity-0"}`}>
 
-            <div className="mt-5 flex flex-col gap-3 text-sm">
+              <p className="text-[10px] uppercase tracking-[0.2em] text-terracotta">
+                Our Services
+              </p>
 
-              <Link
-                to="/portfolio"
-                className="transition hover:text-terracotta"
-              >
-                Portfolio
-              </Link>
+              <div className="mt-5 flex flex-wrap gap-x-9 gap-y-7">
 
-              <Link
-                to="/client-gallery"
-                className="transition hover:text-terracotta"
-              >
-                Client gallery
-              </Link>
+                {services.map((s) => (
+                  <div
+                    key={s.name}
+                    className="flex w-[105px] flex-col items-center gap-3 text-center transition-all duration-300 hover:-translate-y-2 hover:scale-105"
+                  >
+                    <span className="flex h-14 w-14 items-center justify-center rounded-full border border-black/10 text-charcoal/70 transition-all duration-300 hover:-rotate-6 hover:scale-110 hover:bg-white/35 hover:text-terracotta">
+                      {s.icon}
+                    </span>
 
-              <Link
-                to="/enquire"
-                className="transition hover:text-terracotta"
-              >
-                Enquire
-              </Link>
+                    <span className="text-[11px] leading-4 text-charcoal/70">
+                      {s.name}
+                    </span>
+                  </div>
+                ))}
 
+              </div>
             </div>
+
+            {/* ================= FOLLOW OUR JOURNEY ================= */}
+
+
           </div>
 
-          {/* ================= STUDIO ================= */}
-          <div>
+          {/* ================= RIGHT: REVIEW FORM ================= */}
 
-            <p className="text-[10px] uppercase tracking-[0.2em] text-terracotta">
-              Studio
-            </p>
-
-            <div className="mt-5 space-y-3 text-sm text-charcoal/80">
-
-              <p>
-                hello@friendsphotography.studio
-              </p>
-
-              <p>
-                +91 90000 00000
-              </p>
-
-              <p>
-                Pune, Maharashtra
-              </p>
-
-            </div>
-          </div>
-
-          {/* ================= REVIEW FORM ================= */}
-          <div>
+          <div className={`w-full lg:w-[360px] lg:shrink-0 transition-all duration-700 delay-150 ease-out ${footerVisible ? "translate-y-0 opacity-100" : "translate-y-6 opacity-0"}`}>
 
             <p className="text-[10px] uppercase tracking-[0.2em] text-terracotta">
               Share Your Experience
             </p>
 
-            <h2 className="mt-3 font-serif text-2xl">
-              Leave a review
-            </h2>
+
+            {/* FORM - HEIGHT SLIGHTLY INCREASED */}
 
             <form
               onSubmit={handleSubmit}
-              className="mt-4 rounded-2xl bg-[#f5ecdf] p-4 shadow-sm"
+              className="mt-4 min-h-[120px] rounded-2xl bg-[#f5ecdf] p-5 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
             >
 
               {/* Rating */}
+
               <div>
 
                 <p className="text-[9px] uppercase tracking-[0.15em] text-charcoal/50">
@@ -261,6 +428,7 @@ export default function Footer() {
               </div>
 
               {/* Name */}
+
               <input
                 type="text"
                 name="name"
@@ -287,6 +455,7 @@ export default function Footer() {
               />
 
               {/* Review */}
+
               <textarea
                 name="text"
                 placeholder="Your review..."
@@ -314,6 +483,7 @@ export default function Footer() {
               />
 
               {/* Error */}
+
               {error && (
                 <p className="mt-2 text-[11px] text-red-600">
                   {error}
@@ -321,6 +491,7 @@ export default function Footer() {
               )}
 
               {/* Success */}
+
               {success && (
                 <p className="mt-2 text-[11px] text-green-700">
                   ✓ Thank you! Your review has been submitted.
@@ -328,36 +499,41 @@ export default function Footer() {
               )}
 
               {/* Submit */}
+
               <button
                 type="submit"
                 disabled={loading}
                 className="
-                  mt-3
-                  w-full
-                  rounded-full
-                  bg-charcoal
-                  px-4
-                  py-2.5
-                  text-xs
-                  font-medium
-                  text-white
-                  transition
-                  hover:opacity-85
-                  disabled:cursor-not-allowed
-                  disabled:opacity-50
-                "
+    mt-4
+    w-full
+    rounded-full
+    bg-[#2f2a26]
+    px-4
+    py-3
+    text-sm
+    font-medium
+    text-white
+    transition
+    duration-300
+    hover:bg-[#4a4039]
+    disabled:cursor-not-allowed
+    disabled:opacity-50
+  "
               >
                 {loading ? "Submitting..." : "Submit review"}
               </button>
 
             </form>
+
           </div>
 
         </div>
+
       </div>
 
       {/* ================= COPYRIGHT ================= */}
-      <div className="border-t border-black/10">
+
+      <div className={`border-t border-black/10 transition-all duration-700 delay-300 ease-out ${footerVisible ? "translate-y-0 opacity-100" : "translate-y-6 opacity-0"}`}>
 
         <div className="mx-auto max-w-7xl px-6 py-5 text-center text-xs text-charcoal/50 lg:px-10">
           © {new Date().getFullYear()} Friends Photography. All rights reserved.
