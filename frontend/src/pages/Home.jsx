@@ -781,12 +781,17 @@ export default function Home() {
           </div>
 
           <div className="image-hover mx-auto w-full max-w-md overflow-hidden rounded-3xl bg-beige">
-            <img
-              src="https://i.pinimg.com/736x/7f/07/77/7f07770020ed44766d2981d45bd24f19.jpg"
+            <video
+              autoPlay
+              muted
+              loop
+              playsInline
+              preload="auto"
+              src="/rec.mp4"
               alt="Behind the scenes at a Friends Photography shoot"
-              className="h-72 w-full object-cover"
+              className="h-full w-full object-content "
               loading="lazy"
-            />
+            ></video>
           </div>
 
         </div>
