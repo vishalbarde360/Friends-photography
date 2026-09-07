@@ -102,7 +102,8 @@ export default function Navbar() {
 
       {/* Mobile menu panel */}
       <div
-        className={`fixed inset-0 top-[65px] z-40 bg-ivory transition-transform duration-300 ease-in-out md:hidden ${open ? "translate-x-0" : "translate-x-full pointer-events-none"
+        style={{ backgroundColor: "#F8F5EF" }}
+        className={`fixed inset-0 top-[65px] z-[60] bg-ivory opacity-100 shadow-xl transition-transform duration-300 ease-in-out md:hidden ${open ? "translate-x-0" : "translate-x-full pointer-events-none"
           }`}
       >
         <nav className="flex h-full flex-col gap-1 px-6 py-8">
